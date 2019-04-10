@@ -44,12 +44,14 @@ def detect_sign():
         cap = cv2.VideoCapture(0)
         res, score = '', 0.0
         res_list = []
+        counter=0
 
         while True:
             ret, img = cap.read()
             img = cv2.flip(img, 1)
             # img = cv2.flip(img, 0)
             if ret:
+                counter+=1
                 x1, y1, x2, y2 = 300, 100, 500, 300
                 img_cropped = img[y1:y2, x1:x2]
                 image_data = cv2.imencode('.jpg', img_cropped)[1].tostring()
@@ -57,15 +59,17 @@ def detect_sign():
 
                 res, score = predict(
                     image_data, label_lines, softmax_tensor, sess)
-                res_list.append[[res, score]]
-                max_res = ''
-                max_score = 0
-                for item in res_list:
-                    if item[1]>max_score:
-                        max_score=item[1]
-                        max_res=item[0]
-
-                    print("This is the result: ", max_res.upper(), float(max_score))
+                # res_list.append([res, score])
+                # max_res = ''
+                # max_score = 0
+                # if counter%20==0:
+                #     counter = 0
+                #     for item in res_list:
+                #         if item[1]>max_score:
+                #             max_score=item[1]
+                #             max_res=item[0]
+                #     res_list=[]
+                # print("This is the result: ", max_res.upper(), float(max_score))
                 # cv2.putText(img, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
                 # cv2.putText(img, '(score = %.5f)' % (float(score)), (100,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
                 cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
@@ -80,3 +84,4 @@ def detect_sign():
                     break
 
     # Following line should... <-- This should work fine now
+detect_sign()
