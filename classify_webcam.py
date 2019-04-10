@@ -45,6 +45,7 @@ def detect_sign():
         res, score = '', 0.0
         res_list = []
         counter=0
+        
 
         while True:
             ret, img = cap.read()
@@ -57,21 +58,7 @@ def detect_sign():
                 image_data = cv2.imencode('.jpg', img_cropped)[1].tostring()
                 a = cv2.waitKey(1)  # waits to see if `esc` is pressed
 
-                res, score = predict(
-                    image_data, label_lines, softmax_tensor, sess)
-                # res_list.append([res, score])
-                # max_res = ''
-                # max_score = 0
-                # if counter%20==0:
-                #     counter = 0
-                #     for item in res_list:
-                #         if item[1]>max_score:
-                #             max_score=item[1]
-                #             max_res=item[0]
-                #     res_list=[]
-                # print("This is the result: ", max_res.upper(), float(max_score))
-                # cv2.putText(img, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
-                # cv2.putText(img, '(score = %.5f)' % (float(score)), (100,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
+                res, score = predict(image_data, label_lines, softmax_tensor, sess)
                 cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
                 cv2.imshow("img", img)
                 # img_sequence = np.zeros((200,1200,3), np.uint8)
