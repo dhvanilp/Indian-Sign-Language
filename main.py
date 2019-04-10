@@ -2,8 +2,10 @@ import subprocess
 import cv2
 import os
 from tkinter import *
+from tkinter import messagebox
 from classify_webcam import detect_sign
-from classify_webcam import prediction_output
+import threading
+
 
 
 def train_model():
@@ -11,9 +13,15 @@ def train_model():
     print("Model Trained")
 
 
-def create_sign_images(sign_name):
+def create_sign_images(main_window_object, sign_name):
     if os.path.isdir("./dataset/"+sign_name) == False:
         os.mkdir("./dataset/"+sign_name)
+    else:
+        MsgBox = messagebox.askquestion ('Rewrite Label','Are you sure you want to rewrite the label, label already exists',icon = 'warning')
+        if MsgBox != 'yes':
+            return
+        else:
+            pass
     c = 0
     cap = cv2.VideoCapture(0)
     res, score = '', 0.0
@@ -39,7 +47,12 @@ def create_sign_images(sign_name):
                 cv2.imwrite("./dataset/" + sign_name + "/" + str(i) + ".jpg", img_cropped)
             elif i >= 150:
                 cv2.destroyAllWindows()
+                train_button = Button(main_window_object, text="Train(after dataset creation)", command=train_model)
+                train_button.grid(row=1, column=1)
                 return
+            if a == 27:  # when `esc` is pressed
+                cv2.destroyAllWindows()
+                break
 
 
 def init_gui(main_window_object):
@@ -55,18 +68,32 @@ def init_gui(main_window_object):
     enter_label.grid(row=0, column=1)
     # enter_label.pack()
 
-    add_sign_button = Button(main_window_object, text="Add Sign", command=lambda: create_sign_images(enter_label.get()))
-    add_sign_button.grid(row=1, column=0)
+    add_sign_button = Button(main_window_object, text="Add Sign", command=lambda: create_sign_images(main_window_object, enter_label.get()))
+    add_sign_button.grid(row=0, column=2)
     # add_sign_button.pack()
-    train_button = Button(main_window_object, text="Train(after dataset creation)", command=train_model)
-    train_button.grid(row=1, column=1)
+    
 
-    detect_button = Button(main_window_object, text="Detect", command=detect_sign)
+    text = Text(main_window_object,height=10)
+    # text.width(100)
+    # text.height(100)
+
+    text.grid(row=3,columnspan=3)
+
+    detect_button = Button(main_window_object, text="Detect", command=lambda: helper(text))
     detect_button.grid(row=2, column=0)
 
     exit_button = Button(main_window_object, text="Exit", command=lambda: exit())
     exit_button.grid(row=2, column=1)
 
+
+class MyThread(threading.Thread):
+    def run(self):
+        detect_sign(self._kwargs['text'])
+        
+
+def helper(text):
+    t= MyThread(kwargs={'text':text})
+    t.start()
 
 
 def main():
