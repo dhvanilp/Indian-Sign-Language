@@ -1,0 +1,6 @@
+dataset
+logs/bottlenecks
+logs/training_summaries
+venv
+.vscode
+
