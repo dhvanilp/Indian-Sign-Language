@@ -1,14 +1,12 @@
 a
 b
-back
 blank
 c
 d
-delete
 e
+end
 f
 g
-go
 h
 i
 j
@@ -21,8 +19,8 @@ p
 q
 r
 s
-sleep
 space
+start
 t
 u
 v

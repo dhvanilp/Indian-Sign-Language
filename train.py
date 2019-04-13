@@ -1,13 +1,4 @@
-"""
-The program applies Transfer Learning to this existing model and re-trains it to classify a new set of images.
 
-This example shows how to take a Inception v3 architecture model trained on ImageNet images,
-and train a new top layer that can recognize other classes of images.
-
-You can replace the image_dir argument with any folder containing subfolders of
-images. The label for each image is taken from the name of the subfolder it's in.
-
-"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function

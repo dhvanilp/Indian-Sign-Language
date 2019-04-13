@@ -48,7 +48,7 @@ def detect_sign(text_gui):
         res_list = []
         counter=0
         
-
+        start=False
         while True:
             ret, img = cap.read()
             img = cv2.flip(img, 1)
@@ -72,9 +72,29 @@ def detect_sign(text_gui):
                             max_score=item[1]
                             max_res=item[0]
                     res_list=[]
-                    text_gui.insert(INSERT, max_res+"\n")
-                    print("This is the result: ", max_res.upper(), float(max_score))
-                    prediction_output.append(max_res.upper())
+                    # text_gui.delete(1.0,END)
+                    print("This is the result: ", max_res, float(max_score))
+                    if max_res=="start":
+                        start=True
+                        continue
+                        print(start)
+                    
+                    elif max_res=="end":
+                        start=False
+                        cv2.destroyAllWindows()
+                        break
+
+                    elif max_res=="blank":
+                        continue
+
+                    if start:
+                        if max_res=="space":
+                            max_res=" "
+                        text_gui.insert(INSERT, max_res)
+                        print("This is the result: ", max_res.upper(), float(max_score))
+                        prediction_output.append(max_res.upper())
+                    
+
                     
                 # cv2.putText(img, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
                 # cv2.putText(img, '(score = %.5f)' % (float(score)), (100,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
