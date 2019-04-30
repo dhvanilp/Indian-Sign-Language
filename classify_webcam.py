@@ -65,7 +65,7 @@ def detect_sign(text_gui):
                 res_list.append([res, score])
                 max_res = ''
                 max_score = 0
-                if counter%20==0:
+                if counter%30==0:
                     counter = 0
                     for item in res_list:
                         if item[1]>max_score:
